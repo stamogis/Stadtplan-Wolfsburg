@@ -1,0 +1,153 @@
+/* Breiter als 1024px */
+@media only screen and (min-width : 1024px) {
+
+  /* Panel
+  -----------------------------------------------------------------------------------------------------------*/
+  /* Größe des göeffneten Panels */
+  .ui-panel:not(.force-full-screen) {
+    width: 400px;
+  }
+
+  /* Größe des geschlossenen Panels */
+  .ui-panel-closed {
+    width: 0px;
+    left: 0px;
+  }
+
+  /* Dismiss - Bereich in dem ein Klick das Panel schließt */
+  .ui-panel-dismiss {
+    left: 0px;
+    right: 0px;
+  }
+
+  /* Panel positioning (for overlay and push) */
+  /* Panel left closed */
+  .ui-panel-position-left:not(.force-full-screen) {
+    left: -400px;
+  }
+
+  /* Panel left closed animated */
+  .ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay,
+  .ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
+    left: 0px;
+    -webkit-transform: translate3d(-400px, 0px, 0px);
+    -moz-transform: translate3d(-400px, 0px, 0px);
+    transform: translate3d(-400px, 0px, 0px);
+  }
+
+  /* Panel left open */
+  .ui-panel-position-left.ui-panel-display-reveal,
+  .ui-panel-open.ui-panel-position-left {
+    left: 0px;
+  }
+
+  /* Panel right closed */
+  .ui-panel-position-right:not(.force-full-screen) {
+    right: -400px;
+  }
+
+  /* Panel right closed animated */
+  .ui-panel-animate.ui-panel-position-right.ui-panel-display-overlay,
+  .ui-panel-animate.ui-panel-position-right.ui-panel-display-push {
+    right: 0px;
+    -webkit-transform: translate3d(400px, 0px, 0px);
+    -moz-transform: translate3d(400px, 0px, 0px);
+    transform: translate3d(400px, 0px, 0px);
+  }
+
+  /* Panel right open */
+  .ui-panel-position-right.ui-panel-display-reveal,
+  .ui-panel-position-right.ui-panel-open {
+    right: 0px;
+  }
+
+  /* Wrapper and fixed toolbars positioning (for reveal and push) */
+  /* Panel left open */
+  .ui-panel-page-content-position-left {
+    left: 400px;
+    right: -400px;
+  }
+
+  /* Panel left open animated */
+  .ui-panel-animate.ui-panel-page-content-position-left {
+    left: 0px;
+    right: 0px;
+    -webkit-transform: translate3d(400px, 0px, 0px);
+    -moz-transform: translate3d(400px, 0px, 0px);
+    transform: translate3d(400px, 0px, 0px);
+  }
+
+  /* Panel right open */
+  .ui-panel-page-content-position-right {
+    left: -400px;
+    right: 400px;
+  }
+
+  /* Panel right open animated */
+  .ui-panel-animate.ui-panel-page-content-position-right {
+    left: 0px;
+    right: 0px;
+    -webkit-transform: translate3d(-400px, 0px, 0px);
+    -moz-transform: translate3d(-400px, 0px, 0px);
+    transform: translate3d(-400px, 0px, 0px);
+  }
+
+  /* Dismiss model open */
+  .ui-panel-dismiss-open.ui-panel-dismiss-position-left:not(.force-full-screen) {
+    left: 400px;
+  }
+  .ui-panel-dismiss-open.ui-panel-dismiss-position-right:not(.force-full-screen) {
+    right: 400px;
+  }
+
+  /* Responsive: wrap on wide viewports once open */
+  .ui-responsive-panel .ui-panel-page-content-open.ui-panel-page-content-position-left {
+    margin-right: 400px;
+  }
+  .ui-responsive-panel .ui-panel-page-content-open.ui-panel-page-content-position-right {
+    margin-left: 400px;
+  }
+  .ui-responsive-panel .ui-panel-page-content-open {
+    width: auto;
+  }
+
+  /* Verkleinertes Panel (z.B. bei den Werkzeugen) */
+  .ui-minimized-sub-panel {
+    min-height: 100%;
+    box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Wenn der Browser/Bildschirm schmaler als 28em ist */
+@media (max-width: 28em) {
+
+  /* Den enstehenden unteren Rand bei Elementen mit Bezeichnung entfernen */
+  .ui-field-contain {
+    padding: 0;
+    margin: 1em 0;
+    border-bottom-width: 0;
+  }
+
+  /* Koordinatenformat - den Text nach links setzen */
+  .coordinatesFormatText {
+    margin-left: 1em;
+  }
+
+  /* Einstellungen - die Größe der Sprachauswahl zurücksetzen */
+  #properties .ui-field-contain .ui-select {
+    width: initial;
+    float: initial;
+  }
+
+  /* Einstellungen - die Position der Schalter zurücksetzen */
+  #properties .ui-field-contain .ui-flipswitch{
+    float: linitial;
+    position: initial;
+    right: initial;
+  }
+
+  /* Den Titel im Header ausblenden */
+  .ui-header .ui-title {
+    visibility: hidden;
+  }
+}

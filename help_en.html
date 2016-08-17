@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Mobile Viewer - Help</title>
+    <link rel="apple-touch-icon" href="img/app_icon.png"/>
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div id="helpContent">
+
+      <nav id="help_nav">
+        <h2>Table of Contents</h2>
+        <ul>
+          <li><a href="#help_general" class='helpAnchor'>Handling</a></li>
+          <li><a href="#helptopicsandlayer" class='helpAnchor'>Topics and Layers</a></li>
+          <li><a href="#help_search" class='helpAnchor'>Search</a></li>
+          <li><a href="#help_location" class='helpAnchor'>Location</a></li>
+          <li><a href="#help_tools" class='helpAnchor'>Tools</a></li>
+          <li><a href="#help_settings" class='helpAnchor'>Settings</a></li>
+        </ul>
+      </nav>
+
+      <div id="help_general">
+        <h2>Handling</h2>
+        <p>The Map extent can be moved by a finger wipe. By spreading two fingers or a double tapping you can zoom in. If you tighten two fingers, you can zoom out.</p>
+        <p>By tapping on a symbol you get an information about it.</p>
+        <p>The user has five buttons with different functions.</p>
+
+        <table>
+          <tr> <td><img src="img/wob_menu.png" alt="Icon Karten" class="help_icon"/></td> <td>opens the topics and layers dialog</td> </tr>
+          <tr> <td><img src="img/search.png" alt="Icon Suche" class="help_icon"/></td> <td>search for addresses or objects</td> </tr>
+          <tr> <td><img src="img/wob_positioning_off.png" alt="Icon Ortung" class="help_icon"/></td> <td>shows the current location of the user</td> </tr>
+          <tr> <td><img src="img/wob_tools.png" alt="Icon Werkzeuge" class="help_icon"/></td> <td>measure, E-Mail, Print PDF</td> </tr>
+          <tr> <td><img src="img/properties.png" alt="Icon Einstellungen" class="help_icon"/></td> <td>language, Impressum and other options</td> </tr>
+        </table>
+
+      </div>
+
+      <div id="helptopicsandlayer">
+        <h2>Topics and Layers</h2>
+        <p>Here the user can choose between three tabs (Topics, Layers, Order)</p>
+        <p>In <b>Topics</b> you can open a map with a specific theme.</p>
+        <p>In <b>Layers</b> you can see all layers which belong to the current topic. Here you can turn a layer on and off.</p>
+        <p>In <b>Order</b> you can see all layers which are turned on at the moment. The user can change the the order of these layers by click or tap and move it up and down. The layer which is top in the list, is also top in the map view. That means it will hide the other layers underneath.</p>
+        <p>The activated layer (in dark grey) can be displayed with transparency, by moving the slider or typing the percentage. The higher the value, the more transparent is the layer.</p>
+      </div>
+
+      <div id="help_search">
+        <h2>Search</h2>
+        <p>Here the user can type in every search term. The search works independent of upper and lower case and recognizes even parts of a search term.</p>
+        <p>The results are shown in the list underneath. There is also shown the name of the layer and the count of results in this layer. If you click or tap on a single result the object is centered in the map, marked with a red circle. If this object is part of a layer, which was not yet activated, it gets activated automatically.</p>
+        <p>Note: The user can only find objects, which are part of the actual map topic.</p>
+        <p>In <b>Advanced Search</b> the user can limit your search results.</p>
+        <p>With the <b>filter</b> you can determine for which specific layers results should be displayed.</p>
+        <p>With the <b>destrict based search</b> you can limit the search results to one district.</p>
+        <p>With a <b>Search radius</b> you can define search results for one specific radius. As long as the search radius is activated, the user can position the circle by click/tap in the map. By moving the slider the user can change the perimeter of the circle.</p>
+      </div>
+
+      <div id="help_location">
+        <h2>Location</h2>
+        <p>Click or tap the button and the current location of the user is shown in the map.</p>
+      </div>
+
+      <div id="help_tools">
+        <h2>Tools</h2>
+        <p>With <b>Share map</b> you can send the current map view in an E-Mail with an URL. The center of the map is marked. with a pin, which the user also can fade out. A click on <b>send</b> opens an E-Mail and inserts the URL.</p>
+        <p>With <b>Get coordinates</b> the user can click in the map to get the coordinates of this position.</p>
+        <p>With <b>Measure</b> the user can calculate a distance or an area. A double tap finishes the measure and shows the result.</p>
+        <p>with <b>Print PDF</b> you can export an area in a predefined layout as PDF. At first the user has to choose the format and the scale. Print creates the document and shows it in the browser. There you can save it or print it out.</p>
+      </div>
+
+      <div id="help_settings">
+        <h2>Settings</h2>
+        <p>The user can switch between German and English. This relates to the buttons, the menu and the support texts.</p>
+        <p><b>Map following</b> means the current map view follows the users movement. <b>Map rotation</b> means the map rotates by following the viewing direction of the user. If Map rotation is turned off, the map is always oriented in a northward direction.</p>
+        <p>The user can decide if a <b>scale bar</b> is displayed or not. Even two buttons for <b>Zoom In / Zoom Out</b> can be displayed, when the user isn't comfortable with zooming with a finger wipe.</p>
+      </div>
+
+    </div>
+  </body>
+</html>

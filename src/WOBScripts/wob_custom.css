@@ -1,0 +1,1079 @@
+/* page
+-----------------------------------------------------------------------------------------------------------*/
+/* Karte bis zum Rand des Fensters */
+.ui-content {
+  padding: 0;
+}
+
+/* Verhindert das Verschieben der Kartenbuttons beim Öffnen der Panels */
+#map {
+  position: relative;
+}
+
+/* Scrollbalken */
+.scrollable {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Deaktiviert die blaue Focus-Umrandung beim Anklicken von Elementen */
+.ui-focus, .ui-btn:focus {
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* Button Icons
+-----------------------------------------------------------------------------------------------------------*/
+/* Einstellungen */
+.ui-icon-properties:after {
+  background-image: url("../../img/properties.png");
+}
+
+/* Suche */
+.ui-icon-searching:after {
+  background-image: url("../../img/wob_search_w.png");
+}
+
+/* Ortung "aus" */
+.ui-icon-location_off:after {
+  background-image: url("../../img/wob_positioning_off_w.png");
+}
+
+/* Ortung "an" */
+.ui-icon-location_on:after {
+  background-image: url("../../img/wob_positioning_on_w.png");
+}
+
+/* Kartenebenen */
+.ui-icon-layers:after {
+  background-image: url("../../img/wob_menu.png");
+}
+
+/* Kompass */
+.ui-icon-compass:after {
+  background-image: url("../../img/compass.svg");
+}
+
+/* Klick-Icon der FeatureInfo-Abfrage */
+#clickMarker {
+  background-image: url("../../img/click.svg");
+  width: 20px;
+  height: 20px;
+}
+
+/* Icon der aktuellen Position bei aktivierter Ortung */
+#locationMarker {
+  background-image: url("../../img/location.svg");
+  width: 20px;
+  height: 20px;
+}
+
+/* Impressum */
+.ui-icon-logo:after {
+  background-image: url("../../img/glarus_logo.png");
+}
+
+/* Kartenausschnitt teilen */
+.ui-icon-share:after {
+  background-image: url("../../img/wob_share.png");
+  background-size: 17px auto;
+  background-position: 2px center;
+}
+
+/* Werkzeuge */
+.ui-icon-tools:after {
+  background-image: url("../../img/wob_tools_w.png");
+}
+
+/* PDF-Druck */
+.ui-icon-pdfexport:after {
+  background-image: url("../../img/wob_pdf_export.png");
+  background-size: 19px auto !important;
+}
+
+/* PDF-Druck (Button in der Kopfzeile/Header) */
+.ui-header .ui-icon-pdfexport:after {
+  background-size: 16px auto !important;
+}
+
+/* Messen */
+.ui-icon-measure:after {
+  background-image: url("../../img/wob_measure.png");
+  background-size: 20px 28px !important;
+}
+
+/* Hilfe */
+.ui-icon-help:after {
+  background-image: url("../../img/wob_help.png");
+  background-size: 17px auto;
+}
+
+/* Vergrößern (zoom in) */
+.ui-icon-zoom-in:after {
+  background-image: url("../../img/wob_zoom_in.png");
+}
+
+/* Verkleinern (zoom out) */
+.ui-icon-zoom-out:after {
+  background-image: url("../../img/wob_zoom_out.png");
+}
+
+/* Groupcheckbox Icon bei teilweise ausgewählten unter Checkboxen */
+.ui-icon-partiallyChecked:after {
+  background-image: url("../../img/icon_tristate.png");
+  background-color: #4596ce;
+  border-radius: 0.1875em;
+  height: 18px;
+  width: 18px;
+  margin: -9px 2px 0;
+}
+
+/* Markierung bei aktivierter "Erweiterten Suche" */
+.ui-icon-active:after {
+  background-color: #38c !important;
+}
+
+/* Positionsmarkierung (Stecknadel) beim Kartenausschnitt teilen */
+#sharePositionMarker {
+  background-image: url("../../img/wob_pindblau.png");
+  width: 256px;
+  height: 256px;
+}
+
+/* Buttons
+-----------------------------------------------------------------------------------------------------------*/
+/* Button ausblenden */
+.btnHide {
+  visibility: hidden !important;
+}
+
+/* Größe der Buttons in der Karte */
+#map .ui-btn-icon-notext {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  z-index: 1;
+}
+
+/* Kartenbutton Icon */
+#map .ui-btn-icon-notext::after {
+  background-color: transparent;
+  background-size: 32px 32px;
+  width: 32px;
+  height: 32px;
+  margin: 4px;
+  left: 0;
+  top: 0;
+  border-radius: 0;
+}
+
+/* Kartenbutton mit Beschriftung */
+#map .ui-btn-icon-top {
+  width: 54px;
+  height: 12px;
+  position: absolute;
+  z-index: 1;
+  font-size: 0.6em;
+  padding: 45px 4px 3px 4px;
+  border-width: 0;
+}
+
+/* Kartenbutton mit Beschriftung Icon */
+#map .ui-btn-icon-top::after {
+  background-color: transparent;
+  background-size: 32px 32px;
+  width: 32px;
+  height: 32px;
+  margin: 4px auto 0 auto;
+  left: 0;
+  top: 2px;
+  right: 0;
+  border-radius: 0;
+}
+
+/* Button Icon */
+.btn-icon-text::after {
+  background-color: transparent;
+  background-size: 32px 32px;
+  width: 32px;
+  height: 32px;
+  margin-top: -17px;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Kartenbutton "Einstellungen" */
+#btnProperties {
+  right: 5px;
+  top: 5px;
+  text-shadow: none;
+  background: #AAB400; /* Alte Browsers */
+  background: -moz-linear-gradient(top, #bec800 70%, #AAB400 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(70%,#bec800), color-stop(100%,#AAB400)); /* Chrome, Safari4+ */
+  background: -webkit-linear-gradient(top, #bec800 70%,#AAB400 100%); /* Chrome10+, Safari5.1+ */
+  background: -o-linear-gradient(top, #bec800 70%,#AAB400 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #bec800 70%,#AAB400 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #bec800 70%,#AAB400 100%); /* W3C */
+}
+
+/* Kartenbutton "Werkzeuge" */
+#btnTools {
+  right: 75px;
+  top: 5px;
+  text-shadow: none;
+  background-color: #0073a4;
+  color: white;
+}
+
+/* Kartenbutton "Ortung" */
+#btnLocation {
+  right: 145px;
+  top: 5px;
+  text-shadow: none;
+  background-color: #bc3c64;
+  color: white;
+}
+
+/* Kartenbutton "Suche" */
+#btnSearching {
+  right: 215px;
+  top: 5px;
+  text-shadow: none;
+  background-color: #246d81;
+  color: white;
+}
+
+/* Kartenbutton "Karten" */
+#btnLayers {
+  left: 5px;
+  margin-left: 5px;
+  bottom: 5px;
+  background: #24b5e5;
+  text-shadow: none;
+}
+
+/* Kompass */
+#btnCompass {
+  background: none repeat scroll 0 0 transparent;
+  border: none;
+  box-shadow: none;
+  right: 5px;
+}
+
+/* Kartenbutton Vergrößern (zoom in) */
+#btnZoomIn {
+  top: 5px;
+  left: 5px;
+  margin-left: 5px;
+  opacity: 0.8;
+}
+
+/* Kartenbutton Verkleinern (zoom out) */
+#btnZoomOut {
+  top: 45px;
+  left: 5px;
+  margin-left: 5px;
+  opacity: 0.8;
+}
+
+/* "Erweiterte Suche" aktiviert */
+.activeStatus {
+  color: #38c !important;
+}
+
+/* "Erweiterte Suche" aktiviert (Name des Buttons) */
+.activeStatus-block-a {
+  float: left;
+  width: auto !important;
+}
+
+/* "Erweiterte Suche" aktiviert (Status) */
+.activeStatus-block-b {
+  float: right;
+  width: auto !important;
+  position: absolute;
+  right: 50px;
+  top: calc(50% - 6px);
+  font-size: 12px;
+  color: gray;
+}
+
+/* OpenLayers 3
+-----------------------------------------------------------------------------------------------------------*/
+/* Maßstabsbalken */
+.ol-scale-line {
+  background-color: transparent;
+  right: 65px;
+  left: inherit;
+}
+
+/* Maßstabsbalken Style */
+.ol-scale-line-inner {
+  color: black;
+  font-size: 10pt;
+  font-weight: bold;
+  border-color: black;
+  border-style: none none solid none;
+  border-bottom-width: 4px;
+  opacity: 0.6;
+}
+
+/* Copyright-Hinweis - Position */
+.ol-attribution.ol-uncollapsible {
+  bottom: 5px !important;
+  height: auto !important;
+  max-width: calc(100% - 60px);
+}
+
+/* Copyright-Hinweis - Hintergrund */
+.ol-attribution:not(.ol-collapsed) {
+  background: none repeat scroll 0% 0% rgba(0, 0, 0, 0.0);
+}
+
+/* Copyright-Hinweis - Schrift */
+.ol-attribution ul {
+  font-family:"Arial Narrow", Arial, sans-serif;
+}
+
+/* Copyright-Hinweis - OpenLayers Icon ausblenden */
+.ol-attribution.ol-uncollapsible img {
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  color: white;
+  padding: 4px 8px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+/* Tooltip */
+.tooltip-measure {
+  opacity: 1;
+  font-weight: bold;
+}
+
+/* Tooltip */
+.tooltip-static {
+  background-color: #e2ebf4;
+  color: black;
+  border-width: 0;
+  opacity: 1.0;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6)
+}
+
+/* Tooltip */
+.tooltip-measure:before,
+.tooltip-static:before {
+  border-top: 6px solid rgba(0, 0, 0, 0.5);
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  margin-left: -7px;
+  left: 50%;
+}
+
+/* Tooltip */
+.tooltip-static:before {
+  border-top-color: #e2ebf4;
+}
+
+/* FeatureInfo
+-----------------------------------------------------------------------------------------------------------*/
+/* Gesammte Umrandung deaktivieren */
+#featureInfoResults .ui-collapsible-content {
+  border-width: 0;
+}
+
+/* Objekt Typ */
+#featureInfoResults span.type {
+  font-weight: bold;
+  text-align: left;
+  float: left;
+  white-space: normal;
+  font-size: 19px;
+}
+
+/* Attributname */
+#featureInfoResults span.name {
+  font-weight: bold;
+  text-align: left;
+  float: left;
+  white-space: normal;
+}
+
+/* Attributwert */
+#featureInfoResults span.value {
+  font-weight: normal;
+  text-align: right;
+  float: right;
+  white-space: normal;
+}
+
+/* Zeichenabstand vergrößern */
+#featureInfoResults span.letterSpacing {
+  letter-spacing: 1px;
+}
+
+/* Kleinere Schriftgöße */
+#featureInfoResults span.small {
+  font-size: 12px;
+}
+
+/* Größere Abstand zwischen den Zeilen */
+#featureInfoResults span.customLineBreak {
+  display:block;
+  margin-top: 0.25em;
+}
+
+/* Kategorie Button */
+#featureInfoResults .ui-btn {
+  background: #38c;
+  color: #fff;
+  text-shadow: 0 1px 0 #059;
+}
+
+/* Liste der Ergebnisse */
+#featureInfoResults li {
+  background-color: #e2ebf4;
+  padding: 0.7em 7px 0.7em;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Liste der Ergebnisse ab dem zweiten Ergebnis pro Kategorie */
+.featureInfo-childs li:first-child {
+  border-top-left-radius: 0.3125em !important;
+  border-top-right-radius: 0.3125em !important;
+  margin-top: 0.6em;
+}
+
+/* FeatureInfo Ergebnis nach Typ sortierten Blöcken
+-----------------------------------------------------------------------------------------------------------*/
+/* Attributwert */
+.featureInfoResults-block span.value {
+  text-align: left !important;
+  float: left !important;
+}
+
+/* Block (Überschrift + Werte) */
+.featureInfoResults-block li p {
+  font-size: inherit;
+  margin: 1em 0;
+}
+
+/* Inhalt */
+.featureInfoResults-block li {
+  margin: 1em 0 0 !important;
+  border-width: 1px !important;
+  border-radius: 0.3125em !important;
+  padding: 0 7px 0.0 !important;
+}
+
+/* Tabelle (Kontakte) */
+.featureInfoResults-block table {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+/* Tabelle (Kontakte) - Breite der 1. Spalte */
+.featureInfoResults-block td:first-child {
+  width: 70px;
+}
+
+/* Oberen Rand beim 1. Ergebniss an den Kategorie-Button angleichen */
+.featureInfoResults-block li:first-child {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-top-width: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Popup-Fenster
+-----------------------------------------------------------------------------------------------------------*/
+/* Umrandung */
+.ui-popup.ui-body-inherit {
+  border-width: 0;
+}
+
+/* Inhalt */
+.ui-popup .ui-content {
+  padding: 10px;
+  background: #e2ebf4;
+}
+
+/* Überschrift */
+.ui-popup .ui-header {
+  border-color: #38c;
+  background: #38c;
+  color: #fff;
+  text-shadow: 0 1px 0 #059;
+}
+
+/* Groupcheckbox und zusammenklappbare Elemente
+-----------------------------------------------------------------------------------------------------------*/
+/* Linker Teil (Checkbox) */
+.ui-collapsible-groupcheckbox {
+  padding-left: inherit;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Rechter Teil (Text) */
+.ui-collapsible[data-groupcheckbox=true] .ui-collapsible-heading-toggle {
+  float: right;
+  width: calc(100% - 97px);
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-left-width: 0 !important;
+}
+
+/* Abstand zwischen dem Button zum zusammenklappen und dessen Inhalt */
+.ui-collapsible[data-groupcheckbox=true] .ui-collapsible-content,
+.ui-collapsible[data-groupcheckbox=false] .ui-collapsible-content {
+  padding: 0 0 0 15px;
+}
+
+/* Panel
+-----------------------------------------------------------------------------------------------------------*/
+/* Größe des geöffneten Panels */
+.ui-panel {
+  width: 100vw;
+}
+
+/* Größe des geschlossenen Panels */
+.ui-panel-closed {
+  width: 0;
+  left: 0;
+}
+
+/* Dismiss - Bereich in dem ein Klick das Panel schließt */
+.ui-panel-dismiss {
+  /* fix closing panels with outside click on IE10 */
+  background-color: inherit;
+  opacity: 0.0;
+
+  left: 0;
+  right: 0;
+
+/* Zum Testen des Klickbereichs */
+/*
+  background-color: red;
+  opacity: 0.5;
+*/
+}
+
+/* Panel positioning (for overlay and push) */
+/* Panel left closed */
+.ui-panel-position-left {
+  left: -100vw;
+}
+
+/* Panel left closed animated */
+.ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
+  left: 0;
+  -webkit-transform: translate3d(-100vw, 0, 0);
+  -moz-transform: translate3d(-100vw, 0, 0);
+  transform: translate3d(-100vw, 0, 0);
+}
+
+/* Panel left open */
+/* hinzugefügt: 15-3 GIS, 2016-01-15, altemeier-t */
+.ui-panel-position-left.ui-panel-display-reveal,
+.ui-panel-open.ui-panel-position-left {
+  left: 0;
+}
+
+/* Panel right closed */
+.ui-panel-position-right {
+  right: -100vw;
+}
+
+/* Panel right closed animated */
+.ui-panel-animate.ui-panel-position-right.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-right.ui-panel-display-push {
+  right: 0;
+  -webkit-transform: translate3d(100vw, 0, 0);
+  -moz-transform: translate3d(100vw, 0, 0);
+  transform: translate3d(100vw, 0, 0);
+}
+
+/* Panel right open */
+/* hinzugefügt: 15-3 GIS, 2016-01-15, altemeier-t */
+.ui-panel-position-right.ui-panel-display-reveal,
+.ui-panel-position-right.ui-panel-open {
+  right: 0;
+}
+
+/* Wrapper and fixed toolbars positioning (for reveal and push) */
+/* Panel left open */
+.ui-panel-page-content-position-left {
+  left: 100%;
+  right: -100%;
+}
+
+/* Panel left open animated */
+.ui-panel-animate.ui-panel-page-content-position-left {
+  left: 0;
+  right: 0;
+  -webkit-transform: translate3d(100vw, 0, 0);
+  -moz-transform: translate3d(100vw, 0, 0);
+  transform: translate3d(100vw, 0, 0);
+}
+
+/* Panel right open */
+.ui-panel-page-content-position-right {
+  left: -100%;
+  right: 100%;
+}
+
+/* Panel right open animated */
+.ui-panel-animate.ui-panel-page-content-position-right {
+  left: 0;
+  right: 0;
+  -webkit-transform: translate3d(-100vw, 0, 0);
+  -moz-transform: translate3d(-100vw, 0, 0);
+  transform: translate3d(-100vw, 0, 0);
+}
+
+/* Dismiss model open */
+.ui-panel-dismiss-open.ui-panel-dismiss-position-left {
+  left: 100%;
+}
+.ui-panel-dismiss-open.ui-panel-dismiss-position-right {
+  right: 100%;
+}
+
+.ui-panel.force-full-screen {
+  min-height: 0;
+}
+
+/* Abstand des gesamten Inhalts zum Panel entfernen (für den Header) */
+.ui-panel-inner {
+  padding: 0;
+}
+
+/* Abstand des Inhalts zum Panel */
+.panel-content {
+  padding: 8px;
+}
+
+/* Den Klick-Bereich zum schließen des Panels deaktivieren */
+.disable-dismiss {
+  left: 100% !important;
+}
+
+/* Verkleinertes Panel (z.B. bei den Werkzeugen) */
+.ui-minimized-sub-panel {
+  min-height: 0;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* Panel Header
+-----------------------------------------------------------------------------------------------------------*/
+/* Abstand der Button */
+.ui-navbar li .ui-btn {
+  margin: 0 !important;
+}
+
+/* Ausgewähler Button */
+.ui-navbar .ui-btn.selected {
+  background: lightgray;
+  /* iOS Fix für weiße Schrift und blaue Umrandung */
+  color: #222;
+  border-color: lightgray;
+  text-shadow: 0 1px 0 #FFF;
+}
+
+/* Button Icon Größe */
+.ui-header .ui-btn::after {
+  background-size: 10px;
+  width: 18px;
+  height: 18px;
+  top: 57%;
+}
+
+/* Linker Button: Abstand Text zum Icon */
+.ui-header .ui-btn-icon-left {
+  padding-left: 2.3em;
+}
+
+/* Rechter Button: Abstand Text zum Icon */
+.ui-header .ui-btn-icon-right {
+  padding-right: 2.3em;
+}
+
+/* Fenster "Einstellungen"
+-----------------------------------------------------------------------------------------------------------*/
+/* Schalter rechtsbündig */
+#properties .ui-field-contain .ui-flipswitch{
+  position: absolute;
+  right: 0;
+}
+
+/* Breite der Bezeichnungen */
+#properties .ui-field-contain label {
+  width: 150px;
+  white-space: nowrap;
+}
+
+/* Breite der Auswahlfelder (z.B. Sprachauswahl) */
+#properties .ui-field-contain .ui-select {
+  width: calc(100% - 170px);
+  min-width: 95px;
+  float: right;
+}
+
+/* Fenster "Hilfe"
+-----------------------------------------------------------------------------------------------------------*/
+/* Größe der Symbole */
+#panelHelp img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Fenster Karten - "Themen"
+-----------------------------------------------------------------------------------------------------------*/
+/* Ausgewählter Tab */
+#topicList li.selected {
+  background-color: lightgray;
+}
+
+/* Entfernt den oberen Rand des 1. Elements der Kartenliste */
+#topicList li:first-child {
+  border-top-width: 0;
+}
+
+/* Überschrift der Kartenlisten rechtsbündig */
+#panelTopics .ui-listview > .ui-li-static:not(.ui-li-has-thumb) {
+  padding-left: 0;
+}
+
+/* Fenster Karten - "Ebenen"
+-----------------------------------------------------------------------------------------------------------*/
+
+/* Fenster Karten - "Reihenfolge"
+-----------------------------------------------------------------------------------------------------------*/
+/* Block der Ebenen zum Verschieben (inkl. Scrollbalken) */
+#listOrderControlgroup {
+  overflow: auto;
+  width: calc(100% - 12px);
+}
+
+/* Liste der Ebenen zum Verschieben */
+#listOrder {
+  /* Breite verkleinert, damit man noch am Rand scrollen kann */
+  width: calc(100% - 20px);
+  box-shadow: none;
+}
+
+/* Elemente der Liste */
+#listOrder li {
+  background-color: #f6f6f6;
+  border-color: #ddd;
+  color: #333;
+  text-shadow: 0 1px 0 #f3f3f3;
+  font-weight: 700;
+  margin: 0.5em 0;
+  border-width: 1px;
+ }
+
+/* 1. Element der Liste */
+#listOrder li:first-child {
+  margin-top: 0;
+}
+
+/* Ausgewähltes Element der Liste */
+#listOrder li.selected {
+  background-color: lightgray;
+}
+
+/* Scrollbalken */
+#listOrderControlgroup::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Scrollbalken Hintergrund */
+#listOrderControlgroup::-webkit-scrollbar-track {
+  border-radius: 0.3125em;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ddd;
+}
+
+/* Aktiver Scrollbalken */
+#listOrderControlgroup::-webkit-scrollbar-thumb {
+  border-radius: 0.3125em;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ddd;
+  background-color: lightgray;
+}
+
+/* Inaktiver Scrollbalken */
+#listOrderControlgroup::-webkit-scrollbar-thumb:window-inactive {
+  background:#ededed;
+}
+
+/* Schieberegler unten am Fenster positionieren */
+#sliderTransparencyContent {
+  position: absolute;
+  bottom: 15px;
+  left: 8px;
+  right: 8px;
+}
+
+/* Hilfetext zum Schieberegler */
+#sliderTransparencyHelpText {
+  margin-bottom: 8px;
+}
+
+/* Fenster "Suche"
+-----------------------------------------------------------------------------------------------------------*/
+/* Abstand der Elemente zum Panel */
+#search {
+  padding: 0 8px 8px 8px;
+}
+
+/* Abstand des Blocks der Sucheingabe zum Panel */
+#searchBar {
+  padding: 8px 8px 0 8px;
+}
+
+/* Block A mit der Sucheingabe */
+#searchBar .ui-block-a {
+  width: calc(100% - 65px);
+}
+
+/* Block B mit dem Suchbutton */
+#searchBar .ui-block-b {
+  width: 61px;
+  float: right;
+}
+
+/* Suchbutton */
+#buttonSearch {
+  height: 12px;
+}
+
+/* Abstand der Liste der Suchergebnisses zum Titel: Suchresultat */
+#searchResultsListScroll {
+  margin-top: 5px;
+}
+
+/* Minimale Höhe der Suchergebnisse für kleine Bildschirme */
+#searchResultsList {
+  min-height: 400px;
+}
+
+/* Schriftart der Suchergebnisse */
+#searchResultsList .ui-btn {
+  font-weight: normal;
+  white-space: normal;
+}
+
+/* Suchergebnisse: Kategorie */
+#searchResultsList .ui-li-divider {
+  background: #38c;
+  color: #fff;
+  text-shadow: 0 1px 0 #059;
+  white-space: initial;
+}
+
+/* Suchergebnisse: Hintergrund */
+#searchResultsList .ui-btn:not(:hover) {
+  background: #e2ebf4;
+}
+
+/* Ausgewähltes Suchergebnis */
+.search-results-select .ui-btn {
+  background: #f4e2e2 !important;
+}
+
+/* Fenster "Filter"
+-----------------------------------------------------------------------------------------------------------*/
+
+/* Stadt- und Ortsteilsuche
+-----------------------------------------------------------------------------------------------------------*/
+/* Abstand nach dem 1. Element der Liste (Gesamte Stadt) hinzufügen */
+#searchAreas .ui-radio:first-of-type {
+  margin-bottom: 20px;
+}
+
+/* Fenster Umkreissuche
+-----------------------------------------------------------------------------------------------------------*/
+/* Schieberegler - Markierungen */
+.sliderTickmarks{
+  box-sizing: border-box;
+  height: 100%;
+  width: 50%;
+  float: left;
+  border-right: 1px solid grey;
+}
+
+/* Schieberegler - Markierungsbezeichnungen */
+.sliderTickmarks span{
+  font-weight: normal;
+  font-size: 12px;
+  margin-left: -10px;
+  position: relative;
+  left: 95%;
+  top: 25px;
+}
+
+/* Schieberegler - Markierungsbezeichnungen - Positionen */
+.ui-slider-track > div.sliderTickmarks:first-child{
+  border-right: 0;
+  width: 0;
+}
+
+/* Schieberegler - Markierungsbezeichnungen - 1. Position */
+.ui-slider-track > div.sliderTickmarks:first-child span{
+  margin-left: -5px;
+}
+
+/* Schieberegler - Markierungsbezeichnungen - letzte Position */
+.ui-slider-track > div.sliderTickmarks:last-of-type{
+  border-right: 0;
+  margin-left: -10px;
+}
+
+/* Abstand des Schiebereglers zum nachfolgenden Element */
+#sliderUmkreissucheContent {
+  margin-bottom: 30px;
+}
+
+/* Blendet den Button "Auf Standort positionieren" aus */
+.buttonUmkreissucheToMap-hide {
+  visibility: hidden;
+}
+
+/* Fenster "Werkzeuge"
+-----------------------------------------------------------------------------------------------------------*/
+
+/* Fenster "Kartenausschnitt teilen"
+-----------------------------------------------------------------------------------------------------------*/
+
+/* Fenster "Koordinaten abfragen"
+-----------------------------------------------------------------------------------------------------------*/
+/* Textfeld */
+#coordinates {
+  text-align: center;
+}
+
+/* Koordinatenformat */
+.coordinatesFormatText {
+  font-size: 0.8em;
+  color: grey;
+  text-align: left;
+  margin-left: calc(22% + 1em);
+  margin-right: 1em;
+  margin-top: -8px;
+}
+
+/* Fenster "Messen"
+-----------------------------------------------------------------------------------------------------------*/
+/* Abstand des Auswahlfeldes zu den anderen Elementen */
+#panelMeasure .ui-field-contain {
+  margin: 6px 0;
+}
+
+/* Fenster "PDF-Druck"
+-----------------------------------------------------------------------------------------------------------*/
+/* Breite der Bezeichnungen der Auswahlfelder */
+#panelExport .ui-field-contain label {
+  white-space: nowrap;
+}
+
+/* Hilfetexte
+-----------------------------------------------------------------------------------------------------------*/
+/* Hilfetexte */
+.helpText {
+  font-size: 0.8em;
+  color: grey;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+/* Hilfetexte unter den Buttons */
+.helpText-button {
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 2em;
+}
+
+/* Copyright-Hinweis
+-----------------------------------------------------------------------------------------------------------*/
+#attributions {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 5px;
+  height: auto;
+  max-width: calc(100% - 85px);
+  padding: 0 0.5em;
+  font-family:"Arial Narrow", Arial, sans-serif;
+  font-size: 0.7em;
+  text-align: right;
+  text-shadow: none;
+}
+
+/* Drucken über den Browser
+-----------------------------------------------------------------------------------------------------------*/
+@media print {
+
+  /* Buttons ausblenden */
+  #map .ui-btn-icon-top {
+    display: none;
+  }
+  
+  /* Fenster ausblenden */
+  .ui-panel {
+    display: none;
+  }
+
+  /* Kompass anzeigen */
+  #btnCompass {
+    display: inherit;
+  }
+  
+  /* Kompass Icon */
+  .ui-icon-compass {
+    background-image: none;
+    display: list-item !important;
+    list-style-image: url("../../img/compass.svg");
+    list-style-position: inside;
+  }
+
+  /* Icon der aktuellen Position bei aktivierter Ortung */
+  #locationMarker {
+    background-image: none;
+    display: list-item !important;
+    list-style-image: url("../../img/location.svg");
+    list-style-position: inside;
+  }
+
+  /* Klick-Icon der FeatureInfo-Abfrage */
+  #clickMarker {
+    background-image: none;
+    display: list-item !important;
+    list-style-image: url("../../img/click.svg");
+    list-style-position: inside;
+  }
+
+  /* Die Unschärfe beim Maßstabsbalken entfernen */
+  .ol-scale-line-inner {
+    opacity: 1.0;
+  }
+
+}

@@ -1,5 +1,9 @@
 /**
  * Translated strings
+ *
+ * Hinweis:
+ * Diese Datei dient nur noch als Backup für Funktionen, die evtl. doch noch auf diese Datei zugreifen.
+ * Die aktuellen Bezeichnungen und Übersetzungen befinden sich in der WOBScripts/wob_translations.js
  */
 
 I18n = {};
@@ -16,7 +20,7 @@ I18n.properties = {
   header: "Einstellungen",
   mapFollowing: "Kartennachf&uuml;hrung",
   mapRotation: "Kartenausrichtung",
-  scaleBar: "Massstabsbalken",
+  scaleBar: "Maßstabsbalken",
   about: "Impressum",
   share: "Share",
   login: "Login",

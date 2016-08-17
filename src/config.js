@@ -11,7 +11,7 @@ Config.debug = false;
 // GUI
 Config.gui = {
   hideShareButton: false,
-  hideLoginButton: false,
+  hideLoginButton: true,
   useLayertreeGroupCheckboxes: true
 };
 
@@ -49,7 +49,7 @@ Config.data.initialTopic = "geo_admin_pk";
 
 // default properties
 Config.defaultProperties = {
-  following: true,
+  following: false,
   orientation: false,
   scalebar: true
 };
@@ -178,7 +178,7 @@ Config.map.initialGeolocationMaxScale = null;
  * services: SwissSearch services
  * queryPostfix: append this to the query string to limit search results e.g. to a canton ("ZH")
  */
-Config.search = new SwissSearch('swissnames', "");
+//Config.search = new SwissSearch('swissnames', "");
 
 
 /**
@@ -218,11 +218,11 @@ Config.mapfishHighlightWmsUrl = "/wms/FullSearch";
 /**
  * WSGI search
  */
-//Config.search = new WsgiSearch("/wsgi/search.wsgi", "/wsgi/getSearchGeom.wsgi", false);
+Config.search = new WsgiSearch("/wsgi/search.wsgi", "/wsgi/getSearchGeom.wsgi", true);
 
 
 // permalink configuration
-Config.permalink = new Permalink();
+Config.permalink = new CustomPermalink();
 
 
 /**
@@ -259,4 +259,9 @@ Config.print = {
  *
  * e.g. setup custom click handlers here
  */
-Config.customInitViewer = function() {};
+Config.customInitViewer = function() {
+  WOBGui.initViewer();
+  WOBUmkreissuche.initClickHandler();
+  WOBCoordinates.initClickHandler();
+  WOBPermalink.initClickHandler();
+};

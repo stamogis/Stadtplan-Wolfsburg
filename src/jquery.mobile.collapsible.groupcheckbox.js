@@ -21,7 +21,8 @@
     options: {
       groupcheckbox: false,
       checkedIcon: 'checkbox-on',
-      uncheckedIcon: 'checkbox-off'
+      uncheckedIcon: 'checkbox-off',
+      iconpos: "left"
     },
 
     _create: function() {
@@ -61,11 +62,9 @@
         // add collapse button events
         collapsibleButton
           .bind('tap', function(event) {
-            $(this).addClass($.mobile.activeBtnClass);
-          })
-          .bind('click', function(event) {
             var type = collapsibleHeading.is('.ui-collapsible-heading-collapsed') ? 'expand' : 'collapse';
             collapsible.trigger(type);
+            collapsible.collapsible(type);
 
             event.preventDefault();
             event.stopPropagation();
@@ -73,7 +72,7 @@
 
         // add group button events
         groupButton
-          .bind('click', function(event) {
+          .bind('tap', function(event) {
             var checked = !$(this).is('.ui-collapsible-groupcheckbox-button-checked');
 
             // toggle checkbox
@@ -131,9 +130,22 @@
           groupButton
             .toggleClass('ui-collapsible-groupcheckbox-button-checked', checked)
             .toggleClass('ui-collapsible-groupcheckbox-button-somechecked', partiallyChecked);
-          groupButton.find('.ui-icon')
-            .toggleClass('ui-icon-' + o.checkedIcon, checked)
-            .toggleClass('ui-icon-' + o.uncheckedIcon, !checked);
+          if(partiallyChecked) {
+            groupButton
+            .removeClass('ui-' + o.checkedIcon)
+            .removeClass('ui-' + o.uncheckedIcon)
+            .addClass('ui-icon-partiallyChecked', partiallyChecked);
+          } else if(checked) {
+            groupButton
+            .addClass('ui-' + o.checkedIcon)
+            .removeClass('ui-' + o.uncheckedIcon)
+            .removeClass('ui-icon-partiallyChecked', partiallyChecked);
+          } else {
+            groupButton
+            .removeClass('ui-' + o.checkedIcon)
+            .addClass('ui-' + o.uncheckedIcon)
+            .removeClass('ui-icon-partiallyChecked', partiallyChecked);
+          }
 
           if (event == null || event.type != 'groupchange') {
             // trigger event to update parents
@@ -147,6 +159,30 @@
         // sync to children checkboxes
         collapsibleContent.delegate('> .ui-collapsible[data-groupcheckbox=true]', 'groupchange', updateGroupCheckbox);
         collapsibleContent.delegate('> .ui-checkbox :checkbox', 'change checkboxradiocreate', updateGroupCheckbox);
+      }
+      // Ändert den "click"-Event für aufklappbare Elemente ohne Gruppencheckbox zu einem "tap"-Event
+      else {
+        var $el = this.element;
+        var o = this.options;
+        var collapsible = $el;
+        var collapsibleHeading = $el.children(o.heading).first();
+        var collapsibleContent = collapsible.children('.ui-collapsible-content');
+        var collapsibleButton = collapsibleHeading.find('a').first();
+        
+        // remove heading events
+        collapsibleHeading.unbind('tap').unbind('click');
+
+        // add collapse button events
+        collapsibleButton
+          .bind('tap', function(event) {
+            var type = collapsibleHeading.is('.ui-collapsible-heading-collapsed') ? 'expand' : 'collapse';
+            collapsible.trigger(type);
+
+            collapsible.collapsible(type);
+
+            event.preventDefault();
+            event.stopPropagation();
+          });
       }
     }
   });

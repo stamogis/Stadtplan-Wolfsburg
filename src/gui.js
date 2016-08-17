@@ -2,7 +2,7 @@
  * jQuery Mobile GUI
  *
  * events:
- *   topiclayersloaded({topic: <topic>}) 
+ *   topiclayersloaded({topic: <topic>})
  */
 
 var Gui = {};
@@ -30,22 +30,23 @@ Gui.updateLayout = function() {
   $('#map').width(window.innerWidth);
 
   // limit panels to screen height
-  $('#panelTopics .ui-listview').height(window.innerHeight - 90);
-  $('#panelLayerAll').height(window.innerHeight - 90);
-  $('#panelLayerOrder .ui-listview').height(window.innerHeight - 200);
-  $('#panelFeatureInfo #featureInfoResults').height(window.innerHeight - 80);
-  $('#panelSearch .ui-listview').height(window.innerHeight - 170);
-  $('#properties').height(window.innerHeight - 80);
+  // Die Fensterhöhen werden nun in der neuen WOBScripts/wob_gui.js fesgelegt
+  //$('#panelTopics .ui-listview').height(window.innerHeight - 90);
+  //$('#panelLayerAll').height(window.innerHeight - 90);
+  //$('#panelLayerOrder .ui-listview').height(window.innerHeight - 200);
+  //$('#panelFeatureInfo #featureInfoResults').height(window.innerHeight - 80);
+  //$('#panelSearch .ui-listview').height(window.innerHeight - 170);
+  //$('#properties').height(window.innerHeight - 80);
 };
 
 // show selected panel
 Gui.panelSelect = function(panel) {
   $('#panelTopics').toggle(panel === 'panelTopics');
-  $('#panelLayerAll').toggle(panel === 'panelLayerAll');
+  $('#panelLayerAllDiv').toggle(panel === 'panelLayerAllDiv');
   $('#panelLayerOrder').toggle(panel === 'panelLayerOrder');
   // mark panel button
   $('#buttonTopics').toggleClass('selected', panel === 'panelTopics');
-  $('#buttonLayerAll').toggleClass('selected', panel === 'panelLayerAll');
+  $('#buttonLayerAll').toggleClass('selected', panel === 'panelLayerAllDiv');
   $('#buttonLayerOrder').toggleClass('selected', panel === 'panelLayerOrder');
 };
 
@@ -75,7 +76,9 @@ Gui.loadTopics = function(categories) {
         overlay_layer: topic.overlay_layer,
         minscale: topic.minscale,
         bg_topic: topic.bg_topic,
-        overlay_topics: topic.overlay_topics
+        overlay_topics: topic.overlay_topics,
+        searchtables: topic.searchtables,
+        useRadioButtons: topic.useRadioButtons
       };
     }
   }
@@ -88,6 +91,9 @@ Gui.loadTopics = function(categories) {
 };
 
 Gui.selectTopic = function(topic) {
+  // Die Suche zurücksetzen
+  WOBSearch.resetSearch();
+
   Map.clearLayers();
   Map.topic = topic;
   Map.setMinScaleDenom(Map.topics[Map.topic].minscale || Config.map.minScaleDenom.map);
@@ -115,6 +121,12 @@ Gui.selectTopic = function(topic) {
   // mark topic button
   $('#topicList li.topic').removeClass('selected');
   $('#topicList li.topic[data-topic=' + topic + ']').addClass('selected');
+
+  // Die Suchfilter initialisieren
+  WOBSearchFilter.initFilters();
+
+  // Die Exportfunktion zurücksetzen
+  WOBExport.clear();
 };
 
 // update layers list
@@ -123,14 +135,35 @@ Gui.loadLayers = function(data) {
   var layers = [];
 
   function fillLayertree(node, parent, depth) {
+    // Sollen Optionsfelder (RadioButtons) anstatt Checkboxen verwendet werden,
+    // kann nur eine Ebene aus der entsprechenden Ebenengruppe gleichzeitig angezeigt werden.
+    var useRadioButtons = false;
+
     if (node.layers.length > 0) {
+
+      // Wird die aktuelle Ebenengruppe im Feld "useRadioButtons" der topic.json
+      // angegeben, dann sollen Optionsfelder für die Ebenen verwendet werden
+      if(Map.topic != null) {
+        if(Map.topics[Map.topic].useRadioButtons != null) {
+          if(Map.topics[Map.topic].useRadioButtons.indexOf(node.name) != -1) {
+            useRadioButtons = true;
+          }
+        }
+      }
+
       // add group
-      html += '<div data-role="collapsible" data-theme="c"';
-      if (Config.gui.useLayertreeGroupCheckboxes) {
+      html += '<div data-role="collapsible" data-content-theme="false"';
+      if (Config.gui.useLayertreeGroupCheckboxes && !useRadioButtons) {
         html += ' data-groupcheckbox="true"';
+      } else {
+        html += ' data-groupcheckbox="false"';
       }
       html += '>';
       html +=   '<h3>' + node.name + '</h3>';
+
+      if(useRadioButtons) {
+        html +=   '<form>';
+      }
     }
     else {
       // find layer parent group
@@ -144,20 +177,47 @@ Gui.loadLayers = function(data) {
           return el.layername === node.name;
         })[0];
 
-        // add layer
-        html += '<label>';
-        html +=   '<input type="checkbox" ';
-        if (parent != null) {
-          // prevent auto-enhancement by jQuery Mobile if layer belongs to a group
-          html +=   'data-role="none" ';
+        // Wird die aktuelle Ebenengruppe im Feld "useRadioButtons" der topic.json
+        // angegeben, dann sollen Optionsfelder für die Ebenen verwendet werden
+        var useRadioButtons = false;
+        if(Map.topic != null) {
+          if(Map.topics[Map.topic].useRadioButtons != null) {
+            if(parent != null && Map.topics[Map.topic].useRadioButtons.indexOf(parent) != -1) {
+              useRadioButtons = true;
+            }
+          }
         }
-        html +=     'name="' + layer.layername + '" ';
-        html +=     'data-layer="' + layer.layername + '" ';
-        if (layer.visini) {
-          html +=   'checked ';
+        if(useRadioButtons) {
+          html += '<label>';
+          html +=   '<input type="radio" ';
+          html +=     'name="' + parent + '" ';
+          html +=     'id="' + layer.layername + '" ';
+          if (parent != null) {
+            // prevent auto-enhancement by jQuery Mobile if layer belongs to a group
+            html +=   'data-role="none" ';
+          }
+          html +=     'data-layer="' + layer.layername + '" ';
+          if (layer.visini) {
+           html +=   'checked ';
+          }
+          html +=   '>' + layer.toclayertitle;
+          html += '</label>';
+        } else {
+          // add layer
+          html += '<label>';
+          html +=   '<input type="checkbox" ';
+          if (parent != null) {
+            // prevent auto-enhancement by jQuery Mobile if layer belongs to a group
+            html +=   'data-role="none" ';
+          }
+          html +=     'name="' + layer.layername + '" ';
+          html +=     'data-layer="' + layer.layername + '" ';
+          if (layer.visini) {
+            html +=   'checked ';
+          }
+          html +=   '>' + layer.toclayertitle;
+          html += '</label>';
         }
-        html +=   '>' + layer.toclayertitle;
-        html += '</label>';
 
         layers.push({
           layername: layer.layername,
@@ -178,6 +238,11 @@ Gui.loadLayers = function(data) {
     }
 
     if (node.layers.length > 0) {
+
+      if(useRadioButtons) {
+        html +=   '</form>';
+      }
+
       html += '</div>';
     }
   }
@@ -228,7 +293,8 @@ Gui.loadLayers = function(data) {
       maxscale: layer.maxscale,
       hidden_attributes: layer.hidden_attributes,
       hidden_values: layer.hidden_values,
-      transparency: 0
+      transparency: 0,
+      layername: layer.layername
     };
   }
 
@@ -272,6 +338,9 @@ Gui.loadLayers = function(data) {
   }
 
   $.event.trigger({type: 'topiclayersloaded', topic: Map.topic});
+
+  // Alle Optionsfelder (RadioButtons) aktualisieren
+  $("#panelLayerAll input[type='radio']").checkboxradio().checkboxradio("refresh");
 };
 
 // add background layer
@@ -316,7 +385,7 @@ Gui.setupOverlayTopics = function(overlayTopics) {
 
   if (overlayTopics.length > 0) {
     // add overlay group to layer tree
-    var html = '<div id="overlayTopics" data-role="collapsible" data-theme="c" data-groupcheckbox="false">';
+    var html = '<div id="overlayTopics" data-role="collapsible" data-groupcheckbox="false">';
     html +=      '<h3>' + I18n.layers.overlays + '</h3>';
 
     // add overlay layers to group (from bottom to top)
@@ -434,7 +503,8 @@ Gui.resetLayerOrder = function() {
   $('#listOrder').html(html);
   $('#listOrder').listview('refresh');
 
-  Gui.selectLayer(null);
+  // Die 1. Ebene automatisch auswählen
+  Gui.selectLayer($('#listOrder li').first().data('layer'));
 };
 
 // add/remove layer in layer order panel
@@ -493,6 +563,14 @@ Gui.onLayerOrderChanged = function(event, ui) {
     }
   }
 
+  // Die aktuell ausgewählte Ebene merken
+  var selectedLayer;
+  $('#listOrder li').each(function(index) {
+    if($(this).hasClass('selected')) {
+      selectedLayer = $(this).data('layer');
+    }
+  });
+
   // unselect layer
   Gui.selectLayer(null);
 
@@ -509,6 +587,9 @@ Gui.onLayerOrderChanged = function(event, ui) {
       orderedLayers[layer] = Map.layers[layer];
     }
   }
+
+  // Die zuletzt ausgewählte Ebene wieder auswählen
+  Gui.selectLayer(selectedLayer);
 
   // update map
   Map.layers = orderedLayers;
@@ -544,8 +625,21 @@ Gui.showFeatureInfoResults = function(data) {
     $('#featureInfoResults').html(data.join(''));
   }
 
-  $('#panelFeatureInfo').panel('open');
-  Map.toggleClickMarker(true);
+  // Wenn die FeatureInfo-Abfrage kein Ergebnis erbrachte
+  if($('#featureInfoResults').html() == "") {
+    // Falls in der wob_config.js aktiviert, ein Popup-Fenster mit einem Hinweistext an der Klick-Koordinate anzeigen
+    if(WOBConfig.search.noFeatureFoundInfo) {
+      $('#popupContent').empty();
+      $('#popupContent').append(WOBTranslation.panelFeatureInfo.noFeatureFoundInfo[WOBGui.currentLanguage]);
+
+      var screenCoordinates =  Map.map.getPixelFromCoordinate(Map.lastClickPos);
+      $('#popup').popup('open', {x: screenCoordinates[0], y: screenCoordinates[1], history: false, positionTo: "origin"});
+      Map.toggleClickMarker(true);
+    }
+  } else {
+    $('#panelFeatureInfo').panel('open');
+    Map.toggleClickMarker(true);
+  }
 };
 
 // convert XML feature info results to HTML
@@ -560,59 +654,125 @@ Gui.showXMLFeatureInfoResults = function(results) {
       layerTitle = layer.title;
     }
 
-    html += '<div data-role="collapsible" data-collapsed="false" data-theme="c">';
+    html += '<div data-role="collapsible"  data-collapsed="false">';
     html +=   '<h3>' + layerTitle + '</h3>';
 
     var hiddenAttributes = [];
     if (layer != undefined && layer.hidden_attributes != undefined) {
       hiddenAttributes = layer.hidden_attributes;
     }
-    var hiddenValues = [];
+    var hiddenValues = ["", "NULL"];
     if (layer != undefined && layer.hidden_values != undefined) {
       hiddenValues = layer.hidden_values;
+    }
+
+    // Doppelte Einträge aus der FeatureInfo-Abfrage entfernen
+    if(WOBConfig.featureInfo.filterFeatureInfoResult) {
+      for (var topic in WOBConfig.featureInfo.filterFeatureInfoResultLayer) {
+        if (WOBConfig.featureInfo.filterFeatureInfoResultLayer.hasOwnProperty(topic)) {
+          if(WOBConfig.featureInfo.filterFeatureInfoResultLayer[topic].topic == Map.topic) {
+            for (var layerIndex in WOBConfig.featureInfo.filterFeatureInfoResultLayer[topic].layers) {
+              if(WOBConfig.featureInfo.filterFeatureInfoResultLayer[topic].layers[layerIndex] == result.layer) {
+                var filteredFeatures = WOBFeatureInfo.featureInfoResultsFilter(result.features, WOBConfig.featureInfo.filterFeatureInfoResultLayer[topic].attributes[layerIndex]);
+                if(filteredFeatures.length > 0) {
+                  result.features = filteredFeatures;
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
     for (var j=0; j<result.features.length; j++) {
       var feature = result.features[j];
       var title = feature.id === null ? I18n.featureInfo.raster : I18n.featureInfo.feature + feature.id;
 
-      html += '<div class="feature" data-role="collapsible" data-collapsed="false" data-theme="c">';
-      html +=   '<h3>' + title + '</h3>';
-      html +=   '<ul class="ui-listview-inset ui-corner-all" data-role="listview">';
+      // Das Ergebnis der FeatureInfo-Abfrage als Tabelle (Attributname und Attributwert) anzeigen oder
+      // entsprechend des Inhalts in formatierten und sortierten Blöcken
+      if(WOBConfig.featureInfo.showAsTable == false) {
 
-      for (var k=0; k<feature.attributes.length; k++) {
-        var attribute = feature.attributes[k];
+        $("#featureInfoResults").addClass("featureInfoResults-block");
 
-        // skip hidden attributes and hidden values
-        if ($.inArray(attribute.name, hiddenAttributes) == -1 && $.inArray(attribute.value, hiddenValues) == -1) {
+        // Eine Liste wird erzeugt, wenn mehrere Objekte vorhanden sind
+        if(result.features.length > 0 && j == 0) {
+          html +=   '<ul data-role="listview" data-theme="d">';
+        }
+
+        // Erzeugt aus den Attributen eine nach Inhalt formatierte und sortierte HTML-Ausgabe und fügt diese
+        // in die Liste der abgefragten Objekte ein
+        var htmlFeatureInfoResults = WOBFeatureInfo.generateHTMLFeatureInfoResults(feature.attributes, hiddenAttributes, hiddenValues, Map.topic, result.layer);
+        if(htmlFeatureInfoResults != "") {
           html += '<li>';
-          if (attribute.value.match(/^https?:\/\/.+\..+/i)) {
-            // add link to URL from value
-            html += '<a href="' + attribute.value + '" target="_blank" class="link">';
-            html +=   '<span class="name">' + attribute.name + '</span>';
-            html += '</a>';
-          }
-          else {
-            // add attribute name and value
-            html += '<span class="name">' + attribute.name + ': </span>';
-            html += '<span class="value">' + attribute.value + '</span>';
-          }
+          html += htmlFeatureInfoResults;
           html += '</li>';
         }
-      }
 
-      html +=   '</ul>';
-      html += '</div>';
+        if(result.features.length > 0 && j == result.features.length - 1) {
+          html +=   '</ul>';
+        }
+
+      } else {
+
+        $("#featureInfoResults").removeClass("featureInfoResults-block");
+
+        // Wenn mehr als ein Objekt der selben Kategorie vorhanden ist,
+        // werden dessen nachfolgende Objekte in der Liste angehängt,
+        // ohne dabei eine neue Kopfzeile zu generieren
+        if(j > 0) {
+          html +=   '</ul>';
+          html +=   '</br>';
+          html +=   '<ul data-role="listview" data-theme="d" class="featureInfo-childs">';
+        } else {
+          html +=   '<ul data-role="listview" data-theme="d">';
+        }
+
+        for (var k=0; k<feature.attributes.length; k++) {
+          var attribute = feature.attributes[k];
+
+          // skip hidden attributes and hidden values
+          if ($.inArray(attribute.name, hiddenAttributes) == -1 && $.inArray(attribute.value, hiddenValues) == -1) {
+            html += '<li>';
+            // Entfernt "https://" von einem Linknamen
+            if (attribute.value.match(/^https?:\/\/.+\..+/i)) {
+              html +=   '<span class="name">' + attribute.name + '</span>';
+              html +=   '<span class="value"><a href="' + attribute.value + '" target="_blank" class="link">' + attribute.value.replace(/^(https?:\/\/)/,"") + '</a></span>';
+            // Entfernt "http://" von einem Linknamen
+            } else if (attribute.value.match(/^http?:\/\/.+\..+/i)) {
+              html +=   '<span class="name">' + attribute.name + '</span>';
+              html +=   '<span class="value"><a href="' + attribute.value + '" target="_blank" class="link">' + attribute.value.replace(/^(http?:\/\/)/,"") + '</a></span>';
+            // Erzeugt einen Link für das Attribut "Homepage" auch wenn kein "https://" oder "http://" in der URL des Attributwerts vorhanden ist.
+            } else if (attribute.name == 'Homepage' && attribute.value != 'http://' && attribute.value != 'https://'){
+              html +=   '<span class="name">' + attribute.name + '</span>';
+              html +=   '<span class="value"><a href="http://' + attribute.value + '" target="_blank" class="link">' + attribute.value + '</a></span>';
+            // Erzeugt einen Link für das Attribut "E-Mail" zum versenden an die E-Mail-Adresse des Attributwerts
+            } else if (attribute.name == 'Email' || attribute.name == 'eMail' || attribute.name == 'email' || attribute.name == 'E-Mail') {
+              html += '<span class="name">' + attribute.name + '</span>';
+              html += '<span class="value"><a href="mailto:' + attribute.value + '" target="_blank" class="link">' + attribute.value + '</a></span>';
+            } else {
+              // add attribute name and value
+              html += '<span class="name">' + attribute.name + ': </span>';
+              html += '<span class="value">' + attribute.value + '</span>';
+            }
+            html += '</li>';
+          }
+        }
+
+        html +=   '</ul>';
+      }
     }
 
     html += '</div>';
   }
   if (results.length == 0) {
-    html = I18n.featureInfo.noFeatureFound;
+    html = "";
   }
 
   $('#featureInfoResults').html(html);
   $('#featureInfoResults').trigger('create');
+
+  // Die Ergebnisliste der FeatureInfo-Abfrage zum Anfang scrollen
+  $("#featureInfoResults").scrollTop(0);
 };
 
 // show search results list
@@ -624,17 +784,26 @@ Gui.showSearchResults = function(results) {
 
     // category title
     if (categoryResults.category != null) {
-      $('#searchResultsList').append($('<li class="category-title">' + categoryResults.category + '</li>'));
+      $('#searchResultsList').append($('<li data-role="list-divider" class="category-title">' + categoryResults.category + '<span class="ui-li-count">' + categoryResults.results.length + '</span></li>'));
     }
 
     // results
     for (var j=0;j<categoryResults.results.length; j++) {
       var result = categoryResults.results[j];
-      var li = $('<li><a href="#">' + result.name + '</a></li>');
+      var li = $('<li><a style="white-space:normal;" href="#">' + result.name + '</a></li>');
       li.data('bbox', result.bbox);
       li.data('highlight', result.highlight);
       $('#searchResultsList').append(li);
     }
+  }
+
+  // Wenn kein Ergebnis gefunden wurde, wird ein entsprechender Hinweistext angezeigt
+  if(results.length === 0) {
+    var emptyResultsText = WOBTranslation.panelFeatureInfo.noFeatureFoundInfo[WOBGui.currentLanguage];
+    $('#searchResultsList').append(emptyResultsText);
+
+    // Ruft ein Popup-Fenster auf mit weiteren Hinweisen zur Verbesserung des Suchergebnisses
+    WOBSearch.emptyResultsInfo();
   }
 
   $('#searchResultsList').listview('refresh');
@@ -642,24 +811,33 @@ Gui.showSearchResults = function(results) {
   $('#searchResults').show();
 
   // automatically jump to single result
-  if (results.length === 1 && results[0].bbox != null) {
-    Gui.jumpToSearchResult(results[0].bbox);
-    if (results[0].highlight != undefined) {
-      Config.search.highlight(results[0].highlight, Map.setHighlightLayer);
-    }
-  }
+  //if (results.length === 1 && results[0].bbox != null) {
+  //  Gui.jumpToSearchResult(results[0].bbox);
+  //  if (results[0].highlight != undefined) {
+  //    Config.search.highlight(results[0].highlight, Map.setHighlightLayer);
+  //  }
+  //}
+
+  // Wählt das erste Suchergebnis automatisch aus
+  $('#searchResultsList li:not(.category-title)').first().addClass( "search-results-select" );
 };
 
 // bbox as [<minx>, <miny>, <maxx>, <maxy>]
 Gui.jumpToSearchResult = function(bbox) {
+  // Setzt den Timeout des Highlight-Objektes zurück
+  clearTimeout(WOBMap.highlightTimeout);
+
   Map.zoomToExtent(bbox, Config.map.minScaleDenom.search);
 
   // disable following
   $('#switchFollow').val('off');
-  $('#switchFollow').slider('refresh');
+  $('#switchFollow').flipswitch('refresh');
   Gui.toggleFollowing(false);
 
   $('#panelSearch').panel('close');
+
+  // Setzt den Timeout des Highlight-Objektes, um dessen Ebene nach einer bestimmten Zeit auszublenden
+  WOBMap.highlightTimer();
 };
 
 // binds the reorder functionality to the visible layer list
@@ -670,6 +848,8 @@ $(document).bind('pageinit', function() {
 });
 
 Gui.updateTranslations = function() {
+  // Die Übersetzungen werden nun in der neuen WOBScripts/wob_gui_translation.js fesgelegt
+  /*
   document.title = I18n.title;
 
   $('#panelSearch b').html(I18n.search.header);
@@ -699,6 +879,11 @@ Gui.updateTranslations = function() {
   $('#panelLayer #sliderTransparency-label').html(I18n.layers.transparency);
 
   $('#panelFeatureInfo b').html(I18n.featureInfo.header);
+  */
+
+  // Führt die neue Übersetzungsfunktion aus und übergibt dieser
+  // evtl. eine Sprache, die als Parameter in der URL der Anwendung angeben wurde.
+  WOBGuiTranslation.update(UrlParams.params.lang);
 };
 
 Gui.toggleFollowing = function(enabled) {
@@ -734,8 +919,12 @@ Gui.applyPermalink = function() {
 
     // update layer tree
     var checkbox = $('#panelLayerAll :checkbox[data-layer="' + layer + '"]');
-    if (checkbox.is(':checked') != active) {
-      checkbox.prop('checked', active).checkboxradio('refresh').trigger('change');
+    if (checkbox.length > 0 && checkbox.is(':checked') != active) {
+      checkbox.prop('checked', active).checkboxradio().checkboxradio('refresh').trigger('change');
+    }
+    var radioButton = $('#panelLayerAll input[type="radio"][data-layer="' + layer + '"]');
+    if (radioButton.length > 0 && radioButton.is(':checked') != active) {
+      radioButton.prop( "checked", true ).checkboxradio().checkboxradio('refresh');
     }
   };
 
@@ -812,6 +1001,13 @@ Gui.applyPermalink = function() {
       $('#dlgLogin').popup('open');
     }
   }
+
+  // Setzt einen Marker, falls dessen Position in der URL als Parameter angegeben wurde
+  if (Config.permalink.markerPosition) {
+    WOBPermalink.setMarkerPosition(Config.permalink.markerPosition);
+    $('#switchSharePosition').val('on').flipswitch("refresh");
+    WOBPermalink.enable = true;
+  }
 };
 
 Gui.loginStatus = function(result) {
@@ -872,7 +1068,7 @@ Gui.initViewer = function() {
     Gui.panelSelect('panelTopics');
   });
   $('#buttonLayerAll').on('tap', function() {
-    Gui.panelSelect('panelLayerAll');
+    Gui.panelSelect('panelLayerAllDiv');
   });
   $('#buttonLayerOrder').on('tap', function() {
     Gui.panelSelect('panelLayerOrder');
@@ -880,13 +1076,13 @@ Gui.initViewer = function() {
 
   // default properties
   $('#switchFollow').val(Config.defaultProperties.following ? 'on' : 'off');
-  $('#switchFollow').slider('refresh');
+  $('#switchFollow').flipswitch('refresh');
   Gui.toggleFollowing(Config.defaultProperties.following);
   $('#switchOrientation').val(Config.defaultProperties.orientation ? 'on' : 'off');
-  $('#switchOrientation').slider('refresh');
+  $('#switchOrientation').flipswitch('refresh');
   Gui.toggleOrientation(Config.defaultProperties.orientation);
   $('#switchScale').val(Config.defaultProperties.scalebar ? 'on' : 'off');
-  $('#switchScale').slider('refresh');
+  $('#switchScale').flipswitch('refresh');
   Map.toggleScalebar(Config.defaultProperties.scalebar);
 
   // topics
@@ -905,6 +1101,22 @@ Gui.initViewer = function() {
       Gui.updateLayerOrder($(this).data('layer'), $(this).is(':checked'));
     }
   });
+
+  $('#panelLayerAll').delegate('input[type="radio"]', 'change', function(e) {
+    var radioButtons = $(this).parent('.ui-radio').parent('form');
+
+    $(radioButtons).find(":radio").each(function(index) {
+      var radioButton = $(this);
+      if (radioButton.is(':checked')) {
+        Map.setLayerVisible(radioButton.data('layer'), true, false);
+        Gui.updateLayerOrder(radioButton.data('layer'), true);
+      } else {
+        Map.setLayerVisible(radioButton.data('layer'), false, false);
+        Gui.updateLayerOrder(radioButton.data('layer'), false);
+      }
+    });
+  });
+
   Gui.panelSelect('panelTopics');
 
   // selection in layer order
@@ -921,7 +1133,7 @@ Gui.initViewer = function() {
 
   // compass
   $(document).on('maprotation', function(e) {
-    $('#btnCompass').find('.ui-icon').css('transform', 'rotate(' + e.rotation + 'rad)');
+    $('#btnCompass').css('transform', 'rotate(' + e.rotation + 'rad)');
   });
   $('#btnCompass').on('tap', function() {
     Map.setRotation(0);
@@ -930,10 +1142,19 @@ Gui.initViewer = function() {
   // geolocation
   $('#btnLocation').on('tap', function() {
     Gui.tracking = !Gui.tracking;
-    $('#btnLocation .ui-icon').toggleClass('ui-icon-location_off', !Gui.tracking);
-    $('#btnLocation .ui-icon').toggleClass('ui-icon-location_on', Gui.tracking);
+    $('#btnLocation').toggleClass('ui-icon-location_off', !Gui.tracking);
+    $('#btnLocation').toggleClass('ui-icon-location_on', Gui.tracking);
     Map.toggleTracking(Gui.tracking);
     Map.toggleFollowing(Gui.tracking && Gui.following);
+
+    // Wenn die Positionierung aktiviert wurde, dann wird in der Umkreissuche
+    // ein Button eingeblendet, um die Umkreissuche auf die ermittelte Position
+    // zu verschieben
+    if(Gui.tracking && $('#flipUmkreissuche').val() == 1) {
+      $('#buttonUmkreissucheOnLocation').removeClass('ui-disabled');
+    } else if(!Gui.tracking && $('#flipUmkreissuche').val() == 1) {
+      $('#buttonUmkreissucheOnLocation').addClass('ui-disabled');
+    }
   });
 
   // feature info
@@ -950,39 +1171,17 @@ Gui.initViewer = function() {
   });
 
   // search
-  var resetSearchResults = function() {
-    // reset search panel
-    $('#searchResults').hide();
-    // reset highlight
-    Map.setHighlightLayer(null);
-  };
-  $('#searchInput').bind('change', function(e) {
-    if ($(this).val() == "") {
-      // clear search
-      resetSearchResults();
-    }
-  });
-  $('#searchForm').bind('submit', function(e) {
-    resetSearchResults();
-
-    var searchString = $('#searchInput').val();
-    if (searchString != "") {
-      // submit search
-      Config.search.submit(searchString, Gui.showSearchResults);
-      // close virtual keyboard
-      $('#searchInput').blur();
-    }
-
-    // block form submit
+  $('#searchResultsList').delegate('li', 'vclick', function(e) {
+    // Verhindert das zweimalige Ausführen des Tap-Events bei Chrome Mobile
     e.preventDefault();
-    e.stopPropagation();
-  });
-  $('#searchResultsList').delegate('li', 'vclick', function() {
+
     if ($(this).data('bbox') != null) {
       Gui.jumpToSearchResult($(this).data('bbox'));
     }
     if ($(this).data('highlight') != undefined) {
       Config.search.highlight($(this).data('highlight'), Map.setHighlightLayer);
+      WOBSearch.hideActivatedLayers();
+      WOBMap.showLayer($(this).data('highlight').showlayer, WOBSearch.activatedLayers);
     }
   });
 

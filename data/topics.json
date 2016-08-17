@@ -10,7 +10,12 @@
       "categories_topics_sort": 0,
       "wms_url": "http://wms.geo.admin.ch/",
       "background_layer": true,
-      "minscale": 10000
+      "minscale": 10000,
+      "searchtables": {
+        "searchTableKeyword1": "",
+        "searchTableKeyword2": "searchcategory_1, searchcategory_2, searchcategory_3"
+      },
+	  "useRadioButtons": ["layername"]
     },
     {
       "name": "basisplan_av_farbig",

@@ -275,6 +275,8 @@ Map.setLayerVisible = function(layername, visible, updateMap) {
       'LAYERS': Map.visibleLayers().join(',')
     });
   }
+
+  WOBMap.setAttributions();
 };
 
 Map.visibleLayers = function() {
@@ -412,7 +414,7 @@ Map.clampToScale = function(scaleDenom) {
 // zoom to extent and clamp to max zoom level
 // extent as [<minx>, <miny>, <maxx>, maxy>]
 Map.zoomToExtent = function(extent, minScaleDenom) {
-  Map.map.getView().fitExtent(extent, Map.map.getSize());
+  Map.map.getView().fit(extent, Map.map.getSize());
   if (minScaleDenom != null) {
     Map.clampToScale(minScaleDenom);
   }
@@ -443,7 +445,7 @@ Map.toggleTracking = function(enabled) {
         enableHighAccuracy: true
       }
     });
-    Map.geolocation.bindTo('projection', Map.map.getView());
+    Map.geolocation.setProjection(Map.map.getView().getProjection());
 
     Map.geolocation.on('error', function(error) {
       if (error.code == error.PERMISSION_DENIED) {
@@ -457,7 +459,9 @@ Map.toggleTracking = function(enabled) {
       positioning: 'center-center'
     });
     Map.map.addOverlay(marker);
-    marker.bindTo('position', Map.geolocation);
+    Map.geolocation.on('change:position', function() {
+      marker.setPosition(Map.geolocation.getPosition());
+    });
   }
 
   Map.geolocation.setTracking(enabled);

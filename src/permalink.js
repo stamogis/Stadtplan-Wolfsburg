@@ -117,7 +117,7 @@ Permalink.prototype = {
 
   /**
    * add any selection or redlining layers after loading topic layers
-   * 
+   *
    * selectionCallback(<OL3 layer>): add selection layer to map
    * redliningCallback(<OL3 layer>): add redlining layer to map
    */
@@ -127,8 +127,10 @@ Permalink.prototype = {
 /**
  * Create a subclass for custom permalink parameters
  */
-/*
-function CustomPermalink() {};
+function CustomPermalink() {
+  // Position der Stecknadel
+  this.markerPosition = null;
+};
 
 // inherit from Permalink
 CustomPermalink.prototype = new Permalink();
@@ -138,10 +140,14 @@ CustomPermalink.prototype.read = function(urlParams, callback) {
   Permalink.prototype.read.call(this, urlParams);
 
   // custom permalink handling
+  if (urlParams.markerPosition != undefined) {
+    this.markerPosition = $.map(urlParams.markerPosition.split(','), function(value, index) {
+      return parseFloat(value);
+    });
+  }
 
   // init viewer
   callback();
 };
 
 CustomPermalink.prototype.addOverlays = function(selectionCallback, redliningCallback) {};
-*/

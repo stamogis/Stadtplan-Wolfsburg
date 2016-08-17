@@ -1,4 +1,42 @@
-## OL3 Mobile Viewer
+# Stadtplananwendung der Stadt Wolfsburg
+
+Die Stadtplananwendung der Stadt Wolfsburg ist eine mobilfähige Kartenanwendung, die auf den [OL3 Mobile Viewer](https://github.com/sourcepole/ol3-mobile-viewer) aufbaut:
+
+www.wolfsburg.de/stadtplan
+
+Änderungen und neue Funktionen:
+* Angepasste Benutzeroberfläche
+* Aktualisierte Bibliotheken (OpenLayers 3, jQuery Mobile, ...)
+* Erweiterte Suchmöglichkeiten
+  * Themenfilter
+  * Stadt- und Ortsteilsuche
+  * Umkreissuche
+* Neue Werkzeuge
+  * Kartenausschnitt teilen
+  * Koordinaten abfragen
+  * Messen von Strecken oder Flächen
+  * PDF-Druck
+
+## WSGI Suche
+
+Als Suche wird ein Python WSGI Script verwendet (siehe [QGIS-Web-Client](https://github.com/qgis/QGIS-Web-Client#62-wsgi-search)).
+
+Die jeweilige PostgreSQL Tabelle/View muss hierfür folgende Spalten besitzen:
+
+| Spalte | Beschreibung |
+| --- | --- |
+| id | ID zur eindeutigen Identifikation der Suchergebnisse |
+| displaytext | Der Text, der im Suchergebnis angezeigt werden soll |
+| ordertext | Der Text, der zum Sortieren der Suchergebnisse verwendet wird |
+| searchstring | Der Suchstring zum Abgleich mit der Sucheingabe, z.B. "Porschestraße 47A" |
+| searchstring_keywords | Weitere Schlüsselwörter, die mit der Sucheingabe verglichen werden sollen, wenn es für ein Suchergebnis mehrere Bezeichnungen gib, wie z.B. "Kindertagesstätte Kita Kindergarten" |
+| search_category | Bezeichnung des Suchthemas beginnend mit zwei Zahlen zur Angabe der Reihenfolge, z.B. "03_Schulen" |
+| showlayer | Die Kartenebene, die angezeigt werden soll, wenn das Suchergebnis ausgewählt wurde |
+| the_geom | Die Geometrie |
+| geometry_type | Der zurückgegebene Geometrietyp der Funktion ST_GeometryType(the_geom) |
+| searchstring_tsvector | Der Suchstring als PostgreSQL tsvector |
+
+## README: OL3 Mobile Viewer
 
 OL3 Mobile Viewer is a basic map viewer based on OpenLayers 3 and jQuery Mobile.
 
@@ -10,17 +48,17 @@ Features:
 * Map follows current location
 * Manual and compass controlled map orientation
 
-## Customization
+### Customization
 
 * src/config.js
 * src/custom.css
 
-## Runtime configuration
+### Runtime configuration
 
 * topics.json
 * layers.json
 
-### URL parameters
+#### URL parameters
 
 * tiledWms=1|0 : force tiled/untiled WMS
 * topic=TOPIC_NAME : initial topic
@@ -41,15 +79,15 @@ Parameter precedence:
 * scale before zoom
 * activeLayers before inactiveLayers
 
-## Screencast
+### Screencast
 
 [![OL3 Mobile Viewer Screencast](http://img.youtube.com/vi/htphVHMkCOo/0.jpg)](http://youtu.be/htphVHMkCOo)
 
-## Contributions
+### Contributions
 
 Fork this repository and send us a pull request.
 
-## License
+### License
 
 OL3 Mobile viewer is released under the [MIT License](http://www.opensource.org/licenses/MIT).
 

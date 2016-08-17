@@ -38,7 +38,22 @@ FeatureInfo.prototype.handleEvent = function(e) {
   else {
     url = Config.featureInfo.url(Map.topic, e.coordinate, Map.featureInfoLayers());
   }
+
+  // Drehender Ladekreis während der Verarbeitung der FeatureInfo-Abfrage
+  var showLoadingTimer;
+
   $.ajax({
+    // Den Ladekreis erst nach 100 Millisekunden starten, um
+    // ihn bei schnellen Ajax-Anfragen nicht zu berücksichtigen
+    beforeSend: function() { 
+      showLoadingTimer = setTimeout(function () {
+        $.mobile.loading( "show", {
+          text: "Lädt ...",
+          textVisible: false,
+          theme: "a"
+        });
+      }, 100 );
+    },
     url: url,
     dataType: 'text',
     context: this
@@ -52,6 +67,9 @@ FeatureInfo.prototype.handleEvent = function(e) {
     }
 
     this.resultsCallback(results);
+    // Den Timeout des Ladekreises zurücksetzen und den Ladekreis ausblenden
+    clearTimeout(showLoadingTimer);
+    $.mobile.loading( "hide");
   });
 };
 
